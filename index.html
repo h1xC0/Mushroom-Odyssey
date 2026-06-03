@@ -225,7 +225,6 @@
 
             async login(password) {
                 const hash = await this.hashPassword(password);
-                print('Hash: ' + hash)
                 const url = `${hash}/pitch.html`;
 
                 try {
