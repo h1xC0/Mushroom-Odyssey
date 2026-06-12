@@ -6,17 +6,16 @@
     <title>Mushroom Odyssey - Publisher Pitch & Interactive GDD</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="icon" href="https://twemoji.maxcdn.com/v/latest/72x72/1f344.png">
-    <!--
-      Chosen Palette: Mushroom Earth
+    <!-- 
+      Chosen Palette: Mushroom Earth (Enhanced for Mutation Mechanics)
       - Background: #FDFBF7 (Warm Neutral)
       - Primary Text: #2D241E (Deep Earth)
       - Accents: #8B5E3C (Soft Brown), #556B2F (Olive Green), #E2725B (Terra Cotta)
-      - Surface: #FFFFFF (Clean White)
+      - Mutator Colors: #9C27B0 (Corrupted), #FFD700 (Celestial), #00BCD4 (Crystal)
     -->
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
-
+        
         body {
             font-family: 'Inter', sans-serif;
             background-color: #FDFBF7;
@@ -36,6 +35,7 @@
         .nav-link {
             transition: all 0.3s ease;
             border-bottom: 2px solid transparent;
+            white-space: nowrap;
         }
 
         .nav-link.active {
@@ -44,12 +44,11 @@
         }
 
         .glass-card {
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(8px);
             border: 1px solid rgba(139, 94, 60, 0.1);
         }
 
-        /* Prevent vertical overflow during transitions */
         .section-content {
             display: none;
             animation: fadeIn 0.4s ease-out;
@@ -64,21 +63,21 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Circular Infographic Styling */
+        /* 5-Node Circular Infographic Styling */
         .circle-container {
             position: relative;
             width: 100%;
-            max-width: 500px;
+            max-width: 550px;
             aspect-ratio: 1;
             margin: 0 auto;
         }
 
         .circle-bg {
             position: absolute;
-            top: 5%;
-            left: 5%;
-            width: 90%;
-            height: 90%;
+            top: 10%;
+            left: 10%;
+            width: 80%;
+            height: 80%;
             border: 4px dashed rgba(139, 94, 60, 0.25);
             border-radius: 50%;
             animation: rotateDashed 40s linear infinite;
@@ -94,520 +93,402 @@
         }
 
         @keyframes pulseShadow {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(85, 107, 47, 0.4); }
-            50% { box-shadow: 0 0 20px 10px rgba(85, 107, 47, 0.2); }
+            0%, 100% { box-shadow: 0 0 0 0 rgba(139, 94, 60, 0.4); }
+            50% { box-shadow: 0 0 25px 12px rgba(139, 94, 60, 0.2); }
+        }
+
+        /* Mutation Card FX */
+        .mutation-card { transition: all 0.2s ease; }
+        .mutation-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 100%;
+            background-color: #E5E7EB;
+            z-index: 0;
         }
     </style>
 </head>
 <body class="min-h-screen">
 
-    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-stone-200 px-6 py-4">
+    <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-stone-200 px-6 py-4 overflow-x-auto shadow-sm">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-2 flex-shrink-0">
                 <span class="text-2xl">🍄</span>
                 <h1 class="text-xl font-bold tracking-tight text-stone-800">MUSHROOM ODYSSEY</h1>
             </div>
-            <div class="flex gap-6 text-sm font-semibold uppercase tracking-widest text-stone-500">
-                <button onclick="showSection('vision')" class="nav-link active" id="nav-vision">Core Loop</button>
-                <button onclick="showSection('economy')" class="nav-link" id="nav-economy">Economy</button>
-                <button onclick="showSection('ecosystem')" class="nav-link" id="nav-ecosystem">Ecosystem</button>
-                <button onclick="showSection('dungeon')" class="nav-link" id="nav-dungeon">Dungeons</button>
-                <button onclick="showSection('tech')" class="nav-link" id="nav-tech">Status</br></button>
+            <div class="flex gap-4 md:gap-6 text-xs md:text-sm font-semibold uppercase tracking-widest text-stone-500 overflow-x-auto pb-2 md:pb-0 w-full md:w-auto">
+                <button onclick="showSection('pitch')" class="nav-link active" id="nav-pitch">Pitch</button>
+                <button onclick="showSection('loop')" class="nav-link" id="nav-loop">Meta-Loop</button>
+                <button onclick="showSection('systems')" class="nav-link" id="nav-systems">Systems Integration</button>
+                <button onclick="showSection('retention')" class="nav-link" id="nav-retention">Retention & Social</button>
+                <button onclick="showSection('monetization')" class="nav-link" id="nav-monetization">Monetization</button>
+                <button onclick="showSection('liveops')" class="nav-link" id="nav-liveops">Live Ops</button>
             </div>
         </div>
     </nav>
 
     <main class="max-w-7xl mx-auto px-6 py-12">
+        
+        <!-- SECTION 1: EXECUTIVE PITCH & HOOK -->
+        <section id="pitch" class="section-content active">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
+                <div>
+                    <span class="text-amber-600 font-bold tracking-widest uppercase text-sm mb-2 block">The Publisher Hook</span>
+                    <h2 class="text-5xl font-bold text-stone-900 mb-6 leading-tight">A Unified Farming & Exploration Economy</h2>
+                    <p class="text-lg text-stone-600 mb-6 leading-relaxed">
+                        Mushroom Odyssey solves the "disconnected systems" problem common in Roblox RPGs. We don't just offer farming, combat, and exploration as separate mini-games. <strong>We bind them together into one inescapable addiction loop.</strong>
+                    </p>
+                    <p class="text-lg text-stone-600 leading-relaxed">
+                        Combat fuels farming (via rare genetic drops). Exploration creates risk for farming rewards. Farming builds the economy to survive exploration. It is a perfectly tuned, socially driven ecosystem where rare <em>Corrupted</em> or <em>Celestial</em> mushrooms act as ultimate status symbols.
+                    </p>
+                </div>
+                <div class="bg-stone-900 text-white p-8 rounded-3xl shadow-2xl relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-olive-500 rounded-full blur-3xl opacity-20 transform translate-x-10 -translate-y-10"></div>
+                    <h3 class="text-2xl font-bold mb-6 text-amber-400">The "Golden 30-Minute" Guarantee</h3>
+                    <p class="text-stone-400 mb-6 text-sm">To ensure maximum Day-1 retention, the onboarding funnel guarantees every player experiences the full meta-loop within their first session:</p>
+                    <ul class="space-y-4">
+                        <li class="flex items-center gap-3"><span class="text-2xl">🌱</span> <span><strong>Minute 5:</strong> Fast plot progression & first harvest.</span></li>
+                        <li class="flex items-center gap-3"><span class="text-2xl">✨</span> <span><strong>Minute 12:</strong> First RNG <em>Mutation Discovery</em> (Dopamine hit).</span></li>
+                        <li class="flex items-center gap-3"><span class="text-2xl">⚔️</span> <span><strong>Minute 20:</strong> First combat encounter for a <em>Genetic Catalyst</em>.</span></li>
+                        <li class="flex items-center gap-3"><span class="text-2xl">💰</span> <span><strong>Minute 30:</strong> First meaningful NPC sale & Basket upgrade.</span></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
 
-        <section id="vision" class="section-content active">
-            <div class="max-w-3xl mb-12">
-                <h2 class="text-4xl font-bold text-stone-900 mb-4">Player Core Loop</h2>
+        <!-- SECTION 2: THE CORE META-LOOP -->
+        <section id="loop" class="section-content">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-4xl font-bold text-stone-900 mb-4">The Dominant Meta-Loop</h2>
                 <p class="text-lg text-stone-600">
-                    Mushroom Odyssey is a mini open-world survival-RPG. We've combined the addictive gathering loops of <em>Bee Swarm Simulator</em> with the cooperative dungeon
-                    intensity of <em>Deepwoken</em>.
+                    Everything in Mushroom Odyssey supports this 5-stage cycle. Players don't just farm; they <strong>Grow</strong> to <strong>Mutate</strong>, venture out to <strong>Risk</strong>, claim the <strong>Reward</strong>, and <strong>Reinvest</strong> to scale their operations.
                 </p>
             </div>
 
-            <!-- Circular Interactive Infographic -->
             <div class="my-16 flex flex-col items-center">
                 <div class="circle-container">
                     <div class="circle-bg"></div>
-
-                    <!-- Center Loop Repeater Node -->
-                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-32 h-32 md:w-40 md:h-40 rounded-full bg-stone-800 text-white flex flex-col items-center justify-center text-center p-3 shadow-2xl border-4 border-amber-600 pulsate-center">
-                        <span class="text-3xl md:text-4xl mb-1">🔄</span>
-                        <span class="text-[10px] md:text-xs font-bold tracking-widest uppercase">Repeat</span>
+                    
+                    <!-- Center -->
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-32 h-32 md:w-40 md:h-40 rounded-full bg-stone-900 text-white flex flex-col items-center justify-center text-center p-3 shadow-2xl border-4 border-amber-600 pulsate-center">
+                        <span class="text-3xl md:text-4xl mb-1">🔁</span>
+                        <span class="text-[10px] md:text-xs font-bold tracking-widest uppercase">The Addiction Engine</span>
                     </div>
 
-                    <!-- Cardinal Node: Gather (Top) -->
-                    <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-6 md:-translate-y-8 z-20 bg-white shadow-xl border-2 border-olive-600 rounded-2xl p-3 w-36 text-center transition hover:scale-110">
-                        <span class="text-2xl block mb-1">🌿</span>
-                        <h3 class="font-bold text-sm text-stone-900">Gather</h3>
-                        <p class="text-[10px] text-stone-500 leading-tight mt-1">Harvest spores & active biomes</p>
+                    <!-- 1. Grow (Top) -->
+                    <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-6 z-20 bg-white shadow-xl border-2 border-olive-600 rounded-2xl p-3 w-36 text-center hover:scale-110 transition">
+                        <span class="text-2xl block mb-1">🌱</span>
+                        <h3 class="font-bold text-sm text-stone-900">1. Grow</h3>
+                        <p class="text-[9px] text-stone-500 mt-1">Cultivate plots in safe zones.</p>
                     </div>
 
-                    <!-- Cardinal Node: Craft (Right) -->
-                    <div class="absolute top-1/2 right-0 translate-x-6 md:translate-x-8 -translate-y-1/2 z-20 bg-white shadow-xl border-2 border-amber-600 rounded-2xl p-3 w-36 text-center transition hover:scale-110">
-                        <span class="text-2xl block mb-1">⚒️</span>
-                        <h3 class="font-bold text-sm text-stone-900">Craft</h3>
-                        <p class="text-[10px] text-stone-500 leading-tight mt-1">Grow spores & forge gear on plot</p>
+                    <!-- 2. Mutate (Top Right) -->
+                    <div class="absolute top-[25%] right-0 translate-x-8 -translate-y-4 z-20 bg-white shadow-xl border-2 border-purple-600 rounded-2xl p-3 w-36 text-center hover:scale-110 transition">
+                        <span class="text-2xl block mb-1">🧬</span>
+                        <h3 class="font-bold text-sm text-stone-900">2. Mutate</h3>
+                        <p class="text-[9px] text-stone-500 mt-1">Apply RNG mechanics & catalysts for variants.</p>
                     </div>
 
-                    <!-- Cardinal Node: Raid (Bottom) -->
-                    <div class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-6 md:translate-y-8 z-20 bg-white shadow-xl border-2 border-red-600 rounded-2xl p-3 w-36 text-center transition hover:scale-110">
+                    <!-- 3. Risk (Bottom Right) -->
+                    <div class="absolute bottom-[10%] right-[5%] translate-x-4 translate-y-4 z-20 bg-white shadow-xl border-2 border-red-600 rounded-2xl p-3 w-36 text-center hover:scale-110 transition">
                         <span class="text-2xl block mb-1">⚔️</span>
-                        <h3 class="font-bold text-sm text-stone-900">Raid</h3>
-                        <p class="text-[10px] text-stone-500 leading-tight mt-1">Up to 5-Player multi-biome Dungeons</p>
+                        <h3 class="font-bold text-sm text-stone-900">3. Risk</h3>
+                        <p class="text-[9px] text-stone-500 mt-1">Brave high-risk biomes & combat.</p>
                     </div>
 
-                    <!-- Cardinal Node: Trade (Left) -->
-                    <div class="absolute top-1/2 left-0 -translate-x-6 md:-translate-x-8 -translate-y-1/2 z-20 bg-white shadow-xl border-2 border-amber-800 rounded-2xl p-3 w-36 text-center transition hover:scale-110">
-                        <span class="text-2xl block mb-1">⚖️</span>
-                        <h3 class="font-bold text-sm text-stone-900">Trade</h3>
-                        <p class="text-[10px] text-stone-500 leading-tight mt-1">Sell to NPCs, upgrade Basket</p>
+                    <!-- 4. Reward (Bottom Left) -->
+                    <div class="absolute bottom-[10%] left-[5%] -translate-x-4 translate-y-4 z-20 bg-white shadow-xl border-2 border-amber-500 rounded-2xl p-3 w-36 text-center hover:scale-110 transition">
+                        <span class="text-2xl block mb-1">🏆</span>
+                        <h3 class="font-bold text-sm text-stone-900">4. Reward</h3>
+                        <p class="text-[9px] text-stone-500 mt-1">Extract rare boss materials & keys.</p>
+                    </div>
+
+                    <!-- 5. Reinvest (Top Left) -->
+                    <div class="absolute top-[25%] left-0 -translate-x-8 -translate-y-4 z-20 bg-white shadow-xl border-2 border-blue-600 rounded-2xl p-3 w-36 text-center hover:scale-110 transition">
+                        <span class="text-2xl block mb-1">📈</span>
+                        <h3 class="font-bold text-sm text-stone-900">5. Reinvest</h3>
+                        <p class="text-[9px] text-stone-500 mt-1">Upgrade Basket, plots, & tech.</p>
                     </div>
                 </div>
-                <p class="text-stone-400 text-xs italic mt-12 text-center max-w-md">
-                    *Hover over nodes to visualize how each phase intrinsically fuels the next, returning players to the center to repeat and progress.
+            </div>
+        </section>
+
+        <!-- SECTION 3: SYSTEMS INTEGRATION (Mutation & Risk) -->
+        <section id="systems" class="section-content">
+            <div class="mb-12">
+                <h2 class="text-4xl font-bold text-stone-900 mb-4">Deep Systems Synergy</h2>
+                <p class="text-lg text-stone-600 max-w-4xl">
+                    Combat and exploration are no longer isolated. Defeating monsters grants <strong>Genetic Catalysts</strong>. 
+                    Exploration forces players to choose between the safety of the starting forest or the <strong>High-Risk Biomes</strong> to farm ultra-rare mutations.
                 </p>
             </div>
 
-            <div class="mt-16">
-                <h3 class="text-2xl font-bold text-stone-800 mb-6 flex items-center gap-2">
-                    <span>🎮</span> Market Reference Benchmarks
-                </h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <!-- Card 1 -->
-                    <div class="bg-white rounded-2xl overflow-hidden border border-stone-200 shadow-sm flex flex-col">
-                        <img src="https://tr.rbxcdn.com/180DAY-315e29556054777604420711cb64f0b6/768/432/Image/Webp/noFilter?auto=format&fit=crop&w=400&q=80"
-                             alt="Bee Swarm Simulator"
-                             onerror="this.src='https://placehold.co/400x250/2D241E/FDFBF7?text=Bee+Swarm+Simulator'"
-                             class="h-40 w-full object-cover">
-                        <div class="p-4 flex-1 flex flex-col justify-between">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+                <!-- Mutation Matrix -->
+                <div class="glass-card p-8 rounded-3xl">
+                    <h3 class="text-2xl font-bold text-stone-800 mb-6 flex items-center gap-2"><span>🧬</span> The Mutation Matrix</h3>
+                    <p class="text-sm text-stone-600 mb-6">Farming isn't static. Base spores combine with Rarity Tiers and Special Modifiers to create hundreds of collectible assets.</p>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-4 p-3 bg-stone-50 rounded-xl border border-stone-200 mutation-card">
+                            <div class="w-12 h-12 rounded-full bg-cyan-100 flex items-center justify-center text-xl border-2 border-cyan-400">💎</div>
                             <div>
-                                <h4 class="font-bold text-stone-800 text-base">Bee Swarm Simulator</h4>
-                                <p class="text-xs text-stone-500 mt-2">Proven pattern for container size bottlenecking as a core loop driver and gold sink mechanic.</p>
+                                <h4 class="font-bold text-cyan-700">Crystal Modifier</h4>
+                                <p class="text-xs text-stone-500">Requires harvesting in Crystal Caverns. High trade value.</p>
                             </div>
-                            <span class="text-[10px] uppercase font-bold text-amber-700 mt-4 block">Basket Capacity Model</span>
+                        </div>
+                        <div class="flex items-center gap-4 p-3 bg-stone-50 rounded-xl border border-stone-200 mutation-card">
+                            <div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center text-xl border-2 border-purple-500">🌌</div>
+                            <div>
+                                <h4 class="font-bold text-purple-700">Corrupted Modifier</h4>
+                                <p class="text-xs text-stone-500">Requires Boss Catalyst injection. Used for endgame gear.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4 p-3 bg-stone-50 rounded-xl border border-stone-200 mutation-card">
+                            <div class="w-12 h-12 rounded-full bg-yellow-100 flex items-center justify-center text-xl border-2 border-yellow-500">✨</div>
+                            <div>
+                                <h4 class="font-bold text-yellow-600">Celestial Modifier</h4>
+                                <p class="text-xs text-stone-500">0.01% drop rate. Ultimate social status symbol.</p>
+                            </div>
                         </div>
                     </div>
-                    <!-- Card 2 -->
-                    <div class="bg-white rounded-2xl overflow-hidden border border-stone-200 shadow-sm flex flex-col">
-                        <img src="https://tr.rbxcdn.com/180DAY-f6ed57f84cc19cede0d8e699dcc12a89/768/432/Image/Webp/noFilter?auto=format&fit=crop&w=400&q=80"
-                             alt="Adopt Me!"
-                             onerror="this.src='https://placehold.co/400x250/556B2F/FDFBF7?text=Adopt+Me!'"
-                             class="h-40 w-full object-cover">
-                        <div class="p-4 flex-1 flex flex-col justify-between">
-                            <div>
-                                <h4 class="font-bold text-stone-800 text-base">Adopt Me!</h4>
-                                <p class="text-xs text-stone-500 mt-2">Utilizes localized safe-zone housing plot ownership where players farm, grow, and display assets securely.</p>
-                            </div>
-                            <span class="text-[10px] uppercase font-bold text-olive-700 mt-4 block">Safe Plot Ownership</span>
+                </div>
+
+                <!-- Risk vs Reward -->
+                <div class="glass-card p-8 rounded-3xl bg-stone-900 text-white border-none">
+                    <h3 class="text-2xl font-bold text-amber-400 mb-6 flex items-center gap-2"><span>⚠️</span> Risk vs. Reward Biomes</h3>
+                    <p class="text-sm text-stone-400 mb-8">Players constantly ask: <em>"Do I play safe, or risk my inventory in the Fungal Abyss?"</em></p>
+                    
+                    <div class="relative pt-4">
+                        <div class="absolute top-0 left-4 w-1 h-full bg-stone-700"></div>
+                        
+                        <div class="relative pl-10 mb-6">
+                            <div class="absolute left-2.5 top-1 w-4 h-4 rounded-full bg-olive-500 -translate-x-1/2"></div>
+                            <h4 class="font-bold text-lg text-olive-400">1. Safe Zone (Forest)</h4>
+                            <p class="text-xs text-stone-400 mt-1">No PvP, weak mobs. Drops Common/Uncommon spores.</p>
                         </div>
-                    </div>
-                    <!-- Card 3 -->
-                    <div class="bg-white rounded-2xl overflow-hidden border border-stone-200 shadow-sm flex flex-col">
-                        <img src="https://tr.rbxcdn.com/180DAY-6ffd7f3b846cd1ab086d8c7ec41f7d09/150/150/Image/Webp/noFilter?auto=format&fit=crop&w=400&q=80"
-                             alt="Dungeon Quest"
-                             onerror="this.src='https://placehold.co/400x250/E2725B/FDFBF7?text=Dungeon+Quest'"
-                             class="h-40 w-full object-cover">
-                        <div class="p-4 flex-1 flex flex-col justify-between">
-                            <div>
-                                <h4 class="font-bold text-stone-800 text-base">Dungeon Quest</h4>
-                                <p class="text-xs text-stone-500 mt-2">Pioneered dynamic multiplier scaling for party instances matching size directly to boss stat lines.</p>
-                            </div>
-                            <span class="text-[10px] uppercase font-bold text-red-700 mt-4 block">Dynamic Boss Instances</span>
+                        
+                        <div class="relative pl-10 mb-6">
+                            <div class="absolute left-2.5 top-1 w-4 h-4 rounded-full bg-amber-500 -translate-x-1/2"></div>
+                            <h4 class="font-bold text-lg text-amber-400">2. Toxic Swamp</h4>
+                            <p class="text-xs text-stone-400 mt-1">Environmental poison damage. Drops Epic spores & Poison Mutators.</p>
                         </div>
-                    </div>
-                    <!-- Card 4 -->
-                    <div class="bg-white rounded-2xl overflow-hidden border border-stone-200 shadow-sm flex flex-col">
-                        <img src="https://tr.rbxcdn.com/180DAY-0d58b293b1c4e24c6eafe3d27c69eddd/768/432/Image/Webp/noFilter?auto=format&fit=crop&w=400&q=80"
-                             alt="Deepwoken"
-                             onerror="this.src='https://placehold.co/400x250/2D241E/FDFBF7?text=Deepwoken'"
-                             class="h-40 w-full object-cover">
-                        <div class="p-4 flex-1 flex flex-col justify-between">
-                            <div>
-                                <h4 class="font-bold text-stone-800 text-base">Deepwoken</h4>
-                                <p class="text-xs text-stone-500 mt-2">A masterclass in high-stakes environment interactions, risk/reward harvesting, and intense cooperative play.</p>
-                            </div>
-                            <span class="text-[10px] uppercase font-bold text-stone-600 mt-4 block">High-Stakes Combat & AI</span>
+                        
+                        <div class="relative pl-10">
+                            <div class="absolute left-2.5 top-1 w-4 h-4 rounded-full bg-red-500 -translate-x-1/2 shadow-[0_0_10px_rgba(239,68,68,0.8)]"></div>
+                            <h4 class="font-bold text-lg text-red-400">3. Fungal Abyss</h4>
+                            <p class="text-xs text-stone-400 mt-1">High-level hostile AI. Required for Celestial & Ancient farming.</p>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- SECTION: ECONOMY -->
-        <section id="economy" class="section-content">
+        <!-- SECTION 4: RETENTION & SOCIAL -->
+        <section id="retention" class="section-content">
             <div class="max-w-3xl mb-12">
-                <h2 class="text-4xl font-bold text-stone-900 mb-4">The Basket Economy</h2>
+                <h2 class="text-4xl font-bold text-stone-900 mb-4">Retention & Virality Vectors</h2>
                 <p class="text-lg text-stone-600">
-                    The primary economic engine is the <b style="color: #8B5E3C;">Basket</b>. Storage is limited, creating a necessary return-to-base cycle.
-                    Upgrade costs scale exponentially, ensuring long-term gold sinks and a natural path for monetization through instant upgrades.
+                    Roblox games live and die by their social hooks. The <strong>Mushroom Encyclopedia</strong> drives obsessive completionism, while visible farm plots and rare mutations act as powerful social flexes.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="space-y-6">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-200">
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="text-2xl">📖</span>
+                            <h4 class="font-bold text-stone-800 text-lg">The Encyclopedia System</h4>
+                        </div>
+                        <p class="text-sm text-stone-600 leading-relaxed">
+                            A massive collection log tracking every species, rarity, and mutation. Completing sets grants permanent account buffs, titles, and exclusive cosmetics. This guarantees long-term goal setting.
+                        </p>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-200">
+                        <div class="flex items-center gap-3 mb-2">
+                            <span class="text-2xl">🤝</span>
+                            <h4 class="font-bold text-stone-800 text-lg">Social Trading & Farm Visits</h4>
+                        </div>
+                        <p class="text-sm text-stone-600 leading-relaxed">
+                            Players can visit each other's custom farm plots to admire rare "Celestial" harvests on display. Trading rare mutations establishes a deep player-driven economy and Guild dependencies.
+                        </p>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="retentionChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: MONETIZATION -->
+        <section id="monetization" class="section-content">
+            <div class="max-w-3xl mb-12">
+                <h2 class="text-4xl font-bold text-stone-900 mb-4">Ethical Monetization Strategy</h2>
+                <p class="text-lg text-stone-600">
+                    Strictly <strong>NO Pay-To-Win</strong>. Monetization focuses on Convenience, Cosmetics, and Collection Expansion—the most profitable and well-received avenues on the Roblox platform.
                 </p>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <div class="chart-container">
-                    <canvas id="economyChart"></canvas>
+                    <canvas id="monetizationChart"></canvas>
                 </div>
-                <div class="space-y-6">
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-100">
-                        <h4 class="font-bold text-stone-800 mb-2">Exponential Progression</h4>
-                        <p class="text-sm text-stone-600 leading-relaxed">
-                            Upgrade Level Cost: <code class="bg-stone-100 px-2 py-1 rounded">Base × 1.8^n</code>.
-                            This model is proven to drive monetization in top Roblox titles by creating high-value convenience products.
-                        </p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-stone-200 text-center">
+                        <span class="text-3xl block mb-2">🎨</span>
+                        <h4 class="font-bold text-sm">Visual Mutation Effects</h4>
+                        <p class="text-[10px] text-stone-500 mt-1">Premium particle effects for rare crops.</p>
                     </div>
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-100">
-                        <h4 class="font-bold text-stone-800 mb-2">Mystery Spore Blind-Gacha</h4>
-                        <p class="text-sm text-stone-600 leading-relaxed">
-                            Shoveling yields unidentified spores. The delay between planting and maturation creates a dopamine loop similar to "unboxing" or egg-hatching mechanics.
-                        </p>
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-stone-200 text-center">
+                        <span class="text-3xl block mb-2">🎒</span>
+                        <h4 class="font-bold text-sm">Basket Overdrive</h4>
+                        <p class="text-[10px] text-stone-500 mt-1">Instant storage upgrades (Convenience).</p>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-stone-200 text-center">
+                        <span class="text-3xl block mb-2">🏡</span>
+                        <h4 class="font-bold text-sm">Premium Plot Themes</h4>
+                        <p class="text-[10px] text-stone-500 mt-1">Custom house architectures & soils.</p>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-stone-200 text-center">
+                        <span class="text-3xl block mb-2">🐾</span>
+                        <h4 class="font-bold text-sm">Gathering Pets</h4>
+                        <p class="text-[10px] text-stone-500 mt-1">Pets that auto-loot within a short radius.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- SECTION: ECOSYSTEM -->
-        <section id="ecosystem" class="section-content">
-            <div class="max-w-3xl mb-12">
-                <h2 class="text-4xl font-bold text-stone-900 mb-4">Fungal Ecosystem & Hazards</h2>
+        <!-- SECTION 6: LIVE OPS & ROADMAP -->
+        <section id="liveops" class="section-content">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-4xl font-bold text-stone-900 mb-4">Scalability & Live Operations</h2>
                 <p class="text-lg text-stone-600">
-                    Dynamic weather and interactive flora keep exploration fresh. Harvesting isn't just gathering—it's a risk/reward decision.
-                    Collecting "Cursed" flora triggers the server-side "Vecna" hunter.
+                    Mushroom Odyssey is designed as a Live Service. The mutation matrix and modular biomes allow for years of easy-to-implement content updates to drive continuous engagement.
                 </p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Mushroom 1 -->
-                <div class="bg-white p-6 rounded-3xl border-t-8 border-green-700">
-                    <div class="flex justify-between items-start mb-4">
-                        <span class="text-4xl">🍄</span>
-                        <span class="text-[10px] uppercase font-bold text-green-700 bg-green-50 px-2 py-1 rounded">Common</span>
+            <div class="relative max-w-4xl mx-auto py-10">
+                <div class="timeline-line"></div>
+                
+                <!-- Q1 -->
+                <div class="relative flex justify-between items-center w-full mb-12">
+                    <div class="w-5/12 text-right pr-8">
+                        <h3 class="text-xl font-bold text-stone-800">Launch & Stabilization</h3>
+                        <p class="text-sm text-stone-500 mt-2">Core loop tuning, Guild mechanics introduction, and "The Spore Volcano" biome unlock.</p>
                     </div>
-                    <h3 class="font-bold text-xl mb-2">Button Mushroom</h3>
-                    <p class="text-sm text-stone-500 mb-4">Restores +5 HP. Abundant resource for basic survival crafting.</p>
-                    <div class="text-xs font-mono bg-stone-50 p-2 rounded">Utility: HP Recovery</div>
+                    <div class="z-10 flex items-center justify-center w-10 h-10 bg-olive-500 rounded-full border-4 border-white shadow-md text-white font-bold">1</div>
+                    <div class="w-5/12 pl-8"></div>
                 </div>
-                <!-- Mushroom 2 -->
-                <div class="bg-white p-6 rounded-3xl border-t-8 border-purple-700">
-                    <div class="flex justify-between items-start mb-4">
-                        <span class="text-4xl">💡</span>
-                        <span class="text-[10px] uppercase font-bold text-purple-700 bg-purple-50 px-2 py-1 rounded">Rare</span>
-                    </div>
-                    <h3 class="font-bold text-xl mb-2">Glowshroom</h3>
-                    <p class="text-sm text-stone-500 mb-4">High cave value. Required for crafting portable dungeon lights.</p>
-                    <div class="text-xs font-mono bg-stone-50 p-2 rounded">Utility: Lighting Craft</div>
-                </div>
-                <!-- Mushroom 3 -->
-                <div class="bg-white p-6 rounded-3xl border-t-8 border-red-700">
-                    <div class="flex justify-between items-start mb-4">
-                        <span class="text-4xl">💀</span>
-                        <span class="text-[10px] uppercase font-bold text-red-700 bg-red-50 px-2 py-1 rounded">Cursed</span>
-                    </div>
-                    <h3 class="font-bold text-xl mb-2">Death Cap</h3>
-                    <p class="text-sm text-stone-500 mb-4">Consuming inflicts a random buff/debuff. Harvesting spawns <strong>The Vecna</strong> hunter</p>
-                    <div class="text-xs font-mono bg-stone-50 p-2 rounded">Utility: Random Buff / Debuff </div>
-                </div>
-            </div>
 
-            <div class="mt-12 p-8 bg-blue-50 rounded-3xl border border-blue-100">
-                <div class="flex flex-col md:flex-row items-center gap-8">
-                    <div class="flex-1">
-                        <h4 class="text-2xl font-bold text-blue-900 mb-4">Environmental Catalyst: The Rain</h4>
-                        <p class="text-blue-800 opacity-80">
-                            Dynamic weather cycles act as a surge event. Rain increases mushroom growth by <strong>200%</strong>, driving peak session activity
-                            as players rush to harvest during high-intensity windows.
-                        </p>
-                    </div>
-                    <div class="text-6xl">🌧️</div>
-                </div>
-            </div>
-        </section>
-
-        <section id="dungeon" class="section-content">
-            <div class="max-w-3xl mb-12">
-                <h2 class="text-4xl font-bold text-stone-900 mb-4">Multi-Biome Dungeon Raids</h2>
-                <p class="text-lg text-stone-600">
-                    Dungeon chambers lie deep within hidden biomes. To guarantee consistent engagement, boss encounters adapt
-                    in health, gold rewards, and rare drops to party sizes (up to 5 players) and group level tiers.
-                </p>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-                <div class="space-y-6">
-                    <div class="p-6 bg-stone-800 text-white rounded-2xl shadow-xl">
-                        <h4 class="text-stone-400 uppercase text-[10px] tracking-wider font-bold mb-4">Interactive Dungeon Customization</h4>
-
-                        <!-- Slider 1: Player Count -->
-                        <!-- <div class="mb-5">
-                            <div class="flex justify-between text-sm mb-1">
-                                <span class="text-stone-300">Player Count:</span>
-                                <span class="font-bold text-amber-400" id="playerCount">5 Players</span>
-                            </div>
-                            <input type="range" min="1" max="5" value="5" id="playerSlider" class="w-full h-2 bg-stone-700 rounded-lg appearance-none cursor-pointer accent-amber-500">
-                        </div> -->
-
-                        <!-- Slider 2: Average Group Level -->
-                        <div class="mb-6">
-                            <div class="flex justify-between text-sm mb-1">
-                                <span class="text-stone-300">Average Group Level:</span>
-                                <span class="font-bold text-amber-400" id="groupLevel">Level 8</span>
-                            </div>
-                            <input type="range" min="1" max="50" value="8" id="levelSlider" class="w-full h-2 bg-stone-700 rounded-lg appearance-none cursor-pointer accent-amber-500">
-                        </div>
-
-                        <!-- Mathematical Equation Output Display -->
-                        <div class="p-4 bg-stone-900/50 rounded-xl space-y-3 font-mono text-xs border border-stone-700">
-                            <div class="text-stone-400 uppercase tracking-widest text-[9px]">Scaling Calculations:</div>
-
-                            <div class="flex justify-between items-center">
-                                <!-- <span>Boss HP Formula:</span> -->
-                                <span></span>
-                                <span class="text-[10px] text-stone-400">Base(100) × (Count × 1.5) × Avg Lvl</span>
-                            </div>
-                            <div class="flex justify-between items-center text-sm border-t border-stone-800 pt-2 text-red-400">
-                                <span class="font-bold">Calculated HP:</span>
-                                <span id="bossHpVal" class="font-bold">6000</span>
-                            </div>
-
-                            <div class="flex justify-between items-center pt-2">
-                                <!-- <span>Money Reward:</span> -->
-                                <span></span>
-                                <span class="text-[10px] text-stone-400">Base(150) × (Count × 1.2) × (Avg Lvl × 0.5)</span>
-                            </div>
-                            <div class="flex justify-between items-center text-sm border-t border-stone-800 pt-2 text-yellow-400">
-                                <span class="font-bold">Gold Loot:</span>
-                                <span id="bossGoldVal" class="font-bold">3600</span>
-                            </div>
-
-                            <div class="flex justify-between items-center pt-2">
-                                <!-- <span>Legendary Drop:</span> -->
-                                <span></span>
-                                <span class="text-[10px] text-stone-400">Base(2.5%) × (1 + Count × 0.15) × (1 + Avg Lvl × 0.05)</span>
-                            </div>
-                            <div class="flex justify-between items-center text-sm border-t border-stone-800 pt-2 text-purple-400">
-                                <span class="font-bold">Rare Drop Chance:</span>
-                                <span id="bossDropVal" class="font-bold">6.1%</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="p-6 glass-card rounded-2xl">
-                        <h4 class="font-bold text-stone-800 text-sm mb-1">Cooperative Risk/Reward Optimization</h4>
-                        <p class="text-xs text-stone-600 leading-relaxed">
-                            By multiplying the drop chances and money pools alongside higher player counts and levels, friend groups are heavily incentivized to form and assist lower-tier players to maximize group gains.
-                        </p>
+                <!-- Q2 -->
+                <div class="relative flex justify-between items-center w-full mb-12">
+                    <div class="w-5/12 pr-8"></div>
+                    <div class="z-10 flex items-center justify-center w-10 h-10 bg-amber-500 rounded-full border-4 border-white shadow-md text-white font-bold">2</div>
+                    <div class="w-5/12 pl-8 text-left">
+                        <h3 class="text-xl font-bold text-stone-800">Seasonal Mutations</h3>
+                        <p class="text-sm text-stone-500 mt-2">Introduction of time-limited "Frostbite" mutations. Server-wide Boss Invasions.</p>
                     </div>
                 </div>
 
-                <div class="chart-container">
-                    <canvas id="bossChart"></canvas>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION: TECH -->
-        <section id="tech" class="section-content">
-            <div class="max-w-12xl mb-12">
-                <h2 class="text-4xl font-bold text-stone-900 mb-4">
-                    Technical Execution & Monetization
-                </h2>
-                <div class="flex grid-cols-1 wrap sm:grid-cols-2 gap-4 items-start">
-                    <div class="">
-                        <h3 class="text-4x1 font-bold text-stone-800 mb-2">Monetization</h3>
-                        <p class="text-lg text-stone-600">
-                            The game’s monetization is designed to enhance the experience for players who want to speed up their progression or add customization options.
-                            It does not require players to spend Robux, but it offers optional upgrades that may encourage them to improve and personalize their gameplay experience.
-                        </p>
+                <!-- Q3 -->
+                <div class="relative flex justify-between items-center w-full mb-12">
+                    <div class="w-5/12 text-right pr-8">
+                        <h3 class="text-xl font-bold text-stone-800">Farm Expansion</h3>
+                        <p class="text-sm text-stone-500 mt-2">Player housing overhauls. Introduction of cross-breeding mechanics for custom genetic traits.</p>
                     </div>
-                    <div class="">
-                        <h3 class="text-4x1 font-bold text-stone-800 mb-2">Tech Implementation</h3>
-                        <p class="text-lg text-stone-600">
-                            The core technical architecture for Mushroom Odyssey is already implemented and functional in Roblox Studio, and development of the remaining features is progressing steadily.
-                            However, to stay focused and accelerate progress, we have decided to seek funding to support further development.
-                        </p>
+                    <div class="z-10 flex items-center justify-center w-10 h-10 bg-purple-500 rounded-full border-4 border-white shadow-md text-white font-bold">3</div>
+                    <div class="w-5/12 pl-8"></div>
+                </div>
+
+                <!-- Q4 -->
+                <div class="relative flex justify-between items-center w-full">
+                    <div class="w-5/12 pr-8"></div>
+                    <div class="z-10 flex items-center justify-center w-10 h-10 bg-red-500 rounded-full border-4 border-white shadow-md text-white font-bold">4</div>
+                    <div class="w-5/12 pl-8 text-left">
+                        <h3 class="text-xl font-bold text-stone-800">The Deep Dungeons</h3>
+                        <p class="text-sm text-stone-500 mt-2">Massive endgame raid tier. New "Ancient" rarity added to the Encyclopedia. Guild vs Guild leaderboards.</p>
                     </div>
-
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="p-6 bg-white rounded-2xl border border-stone-200">
-                    <h4 class="font-bold text-olive-800 mb-4 flex items-center gap-2">
-                        <span>✅</span> Implemented features
-                    </h4>
-                    <ul class="space-y-3 text-sm text-stone-600">
-                        <li class="flex items-center gap-2">• <span class="font-semibold">Basket & UI</span>: Animated inventory sync & context menus.</li>
-                        <li class="flex items-center gap-2">• <span class="font-semibold">Combat & AI</span>: Vecna Hunter & Sword VFX.</li>
-                        <li class="flex items-center gap-2">• <span class="font-semibold">Networking</span>: Dynamic Group Zone Creation UI.</li>
-                        <li class="flex items-center gap-2">• <span class="font-semibold">Persistence</span>: Optimized DataStore saving logic.</li>
-                    </ul>
-                </div>
-                <div class="p-6 bg-stone-800 text-white rounded-2xl">
-                    <h4 class="font-bold text-amber-400 mb-4">Non-P2W Monetization Features</h4>
-                    <ul class="space-y-4 text-xs opacity-90">
-                        <li class="flex justify-between">
-                            <span>Instant Basket Upgrades</span>
-                            <span class="text-amber-400">Convenience</span>
-                        </li>
-                        <li class="flex justify-between">
-                            <span>Insta-Grow Fertilizer</span>
-                            <span class="text-amber-400">Time-Save</span>
-                        </li>
-                        <li class="flex justify-between">
-                            <span>Decorative Plot Themes</span>
-                            <span class="text-amber-400">Vanity</span>
-                        </li>
-                        <li class="flex justify-between">
-                            <span>Custom Weapon Skins</span>
-                            <span class="text-amber-400">Bragging Rights</span>
-                        </li>
-                    </ul>
                 </div>
             </div>
         </section>
 
     </main>
 
-    <footer class="mt-5 border-t border-stone-200 bg-stone-50 py-12 px-6 text-center">
-        <p class="text-stone-400 text-m">Mushroom Odyssey</p>
-        <!--<p class="text-stone-400 text-sm">Publisher Pitch Design Document</p>-->
-        <p class="text-stone-300 text-xs mt-2 italic">Made by Adrian & Victoria. <br>All rights reserved ©</br></p>
+    <footer class="mt-12 border-t border-stone-200 bg-stone-900 text-stone-400 py-12 px-6 text-center">
+        <h2 class="text-xl font-bold text-white mb-2">🍄 Mushroom Odyssey</h2>
+        <p class="text-sm">Scalable. Social. Highly Retentive.</p>
+        <p class="text-xs mt-6 opacity-50">Publisher Pitch Deck & GDD Overhaul © 2026</p>
     </footer>
 
     <script>
-        // State Management
-        let currentSection = 'vision';
-
-        // Navigation Logic
+        // Tab Navigation Logic
         function showSection(sectionId) {
             document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-
+            
             document.getElementById(sectionId).classList.add('active');
             document.getElementById('nav-' + sectionId).classList.add('active');
-            currentSection = sectionId;
 
-            // Re-render charts if they are in the visible section
-            if(sectionId === 'economy') renderEconomyChart();
-            if(sectionId === 'dungeon') renderBossChart();
+            // Render charts dynamically when their sections become visible
+            if(sectionId === 'retention') renderRetentionChart();
+            if(sectionId === 'monetization') renderMonetizationChart();
         }
 
-        // Charts initialization
-        let economyChartInst = null;
-        let bossChartInst = null;
+        // --- Chart.js Configurations ---
+        let retentionChartInst = null;
+        let monetizationChartInst = null;
 
-        function renderEconomyChart() {
-            if(economyChartInst) economyChartInst.destroy();
-            const ctx = document.getElementById('economyChart').getContext('2d');
+        const commonChartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { labels: { font: { family: 'Inter' } } }
+            }
+        };
 
-            const labels = ['Lv.1', 'Lv.2', 'Lv.3', 'Lv.4', 'Lv.5', 'Lv.6', 'Lv.7', 'Lv.8'];
-            const data = labels.map((_, i) => Math.floor(100 * Math.pow(1.8, i)));
-
-            economyChartInst = new Chart(ctx, {
+        function renderRetentionChart() {
+            if(retentionChartInst) retentionChartInst.destroy();
+            const ctx = document.getElementById('retentionChart').getContext('2d');
+            
+            retentionChartInst = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Basket Upgrade Cost (Gold)',
-                        data: data,
-                        borderColor: '#8B5E3C',
-                        backgroundColor: 'rgba(139, 94, 60, 0.1)',
-                        fill: true,
-                        tension: 0.4,
-                        pointRadius: 6,
-                        pointBackgroundColor: '#8B5E3C'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: { color: 'rgba(0,0,0,0.05)' }
-                        },
-                        x: { grid: { display: false } }
-                    }
-                }
-            });
-        }
-
-        // Core Mathematical Functions for Dynamic Scaling UI
-        const BASE_HP = 100;
-        const BASE_GOLD = 150;
-        const BASE_DROP = 2.5; // percent
-
-        function calculateHp(count, lvl) {
-            return Math.floor(BASE_HP * (count * 1.5) * lvl);
-        }
-
-        function calculateGold(count, lvl) {
-            return Math.floor(BASE_GOLD * (count * 1.2) * (lvl * 0.5));
-        }
-
-        function calculateDrop(count, lvl) {
-            const val = BASE_DROP * (1 + (count * 0.15)) * (1 + (lvl * 0.05));
-            return val.toFixed(2);
-        }
-
-        function renderBossChart() {
-            if(bossChartInst) bossChartInst.destroy();
-            const ctx = document.getElementById('bossChart').getContext('2d');
-
-            const players = [1, 2, 3, 4, 5];
-            const currentLvl = parseInt(document.getElementById('levelSlider').value);
-
-            // Calculate datasets dynamically based on currently selected average group level
-            const hpData = players.map(p => calculateHp(p, currentLvl));
-            const goldData = players.map(p => calculateGold(p, currentLvl));
-
-            bossChartInst = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: players.map(p => p + ' Player' + (p > 1 ? 's' : '')),
+                    labels: ['Day 1', 'Day 3', 'Day 7', 'Day 14', 'Day 30'],
                     datasets: [
                         {
-                            label: 'Boss HP Scaling',
-                            data: hpData,
-                            backgroundColor: '#E2725B',
-                            borderRadius: 6,
-                            yAxisID: 'y'
+                            label: 'Standard RPG Baseline',
+                            data: [45, 25, 12, 8, 4],
+                            borderColor: '#9CA3AF',
+                            borderDash: [5, 5],
+                            backgroundColor: 'transparent',
+                            tension: 0.4,
+                            borderWidth: 2
                         },
                         {
-                            label: 'Gold Reward Scale',
-                            data: goldData,
-                            backgroundColor: '#FFA502',
-                            borderRadius: 6,
-                            yAxisID: 'y1'
+                            label: 'Mushroom Odyssey (Encyclopedia + Social Loops)',
+                            data: [65, 48, 35, 28, 22],
+                            borderColor: '#8B5E3C',
+                            backgroundColor: 'rgba(139, 94, 60, 0.1)',
+                            fill: true,
+                            tension: 0.4,
+                            borderWidth: 3,
+                            pointBackgroundColor: '#E2725B',
+                            pointRadius: 5
                         }
                     ]
                 },
                 options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'top' }
-                    },
+                    ...commonChartOptions,
                     scales: {
-                        y: {
-                            type: 'linear',
-                            display: true,
-                            position: 'left',
-                            title: { display: true, text: 'Boss Health (HP)' },
+                        y: { 
+                            title: { display: true, text: 'Retention %' },
+                            min: 0, max: 100,
                             grid: { color: 'rgba(0,0,0,0.05)' }
-                        },
-                        y1: {
-                            type: 'linear',
-                            display: true,
-                            position: 'right',
-                            title: { display: true, text: 'Gold Reward (Coins)' },
-                            grid: { drawOnChartArea: false }
                         },
                         x: { grid: { display: false } }
                     }
@@ -615,40 +496,38 @@
             });
         }
 
-        // Dungeon Slider Logic Integration
-        // const pSlider = document.getElementById('playerSlider');
-        const lSlider = document.getElementById('levelSlider');
-
-        // const countDisplay = document.getElementById('playerCount');
-        const levelDisplay = document.getElementById('groupLevel');
-
-        const hpDisplay = document.getElementById('bossHpVal');
-        const goldDisplay = document.getElementById('bossGoldVal');
-        const dropDisplay = document.getElementById('bossDropVal');
-
-        function updateDungeonScalingValues() {
-            const count = 5;
-            const lvl = parseInt(lSlider.value);
-
-            // countDisplay.innerText = count + " Player" + (count > 1 ? 's' : '');
-            levelDisplay.innerText = "Level " + lvl + (lvl === 8 ? " (Featured Spot)" : "");
-
-            hpDisplay.innerText = calculateHp(count, lvl);
-            goldDisplay.innerText = calculateGold(count, lvl);
-            dropDisplay.innerText = calculateDrop(count, lvl) + "%";
-
-            renderBossChart();
+        function renderMonetizationChart() {
+            if(monetizationChartInst) monetizationChartInst.destroy();
+            const ctx = document.getElementById('monetizationChart').getContext('2d');
+            
+            monetizationChartInst = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Convenience (Upgrades)', 'Cosmetics & Mutations', 'Farm Customization', 'Premium Pets'],
+                    datasets: [{
+                        data: [40, 30, 20, 10],
+                        backgroundColor: [
+                            '#E2725B', // Terra Cotta
+                            '#8B5E3C', // Soft Brown
+                            '#556B2F', // Olive
+                            '#FCD34D'  // Amber
+                        ],
+                        borderWidth: 0,
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    ...commonChartOptions,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        title: { display: true, text: 'Projected Revenue Distribution', font: { size: 16 } }
+                    },
+                    cutout: '65%'
+                }
+            });
         }
 
-        // pSlider.addEventListener('input', updateDungeonScalingValues);
-        lSlider.addEventListener('input', updateDungeonScalingValues);
-
-        // Initial Load
-        window.onload = () => {
-            renderEconomyChart();
-            renderBossChart();
-        };
-
+        // Initialize first visible chart if needed (none are visible on 'pitch' load)
     </script>
 </body>
 </html>
